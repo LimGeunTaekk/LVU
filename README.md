@@ -7,6 +7,8 @@
 
 **Goal** : We aim to build a spatio-temporal composition-aware method that supports diverse VQA benchmark
 
+---
+
 **Uniform Sampling (Baseline)**
 
 |     VideoLLMs     |  LLM size  | Input frames | LongVideoBench | VideoMME |  MLVU  | EgoTempo | VidComposition |
