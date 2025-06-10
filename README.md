@@ -10,7 +10,7 @@
 
 ### [As-Is] : 
 
-Uniform Sampling 
+**Uniform Sampling (Baseline)**
 
 |     VideoLLMs     |  LLM size  | Input frames | LongVideoBench | VideoMME |  MLVU  | EgoTempo | VidComposition |
 |:-----------------|:----------:|:------------:|:--------------:|:--------:|:------:|:--------:|:--------------:|
@@ -20,7 +20,7 @@ Uniform Sampling
 |     Qwen2-VL      |      7B    |       32     |        -       |     -    |    -   |     -    |        -       |
 
 
-Adaptive Keyframe Sampling (AKS, CVPR 2025)
+**Adaptive Keyframe Sampling (AKS, CVPR 2025)**
 
 |     VideoLLMs     |  LLM size  | Input frames | LongVideoBench | VideoMME |  MLVU  | EgoTempo | VidComposition |
 |:-----------------|:----------:|:------------:|:--------------:|:--------:|:------:|:--------:|:--------------:|
