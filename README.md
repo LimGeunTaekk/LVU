@@ -11,6 +11,11 @@
 
 **Uniform Sampling (Baseline)**
 
+To do. 
+* a
+* b
+* c
+
 |     VideoLLMs     |  LLM size  | Input frames | [LongVideoBench](https://github.com/longvideobench/LongVideoBench) | [VideoMME](https://github.com/MME-Benchmarks/Video-MME) |  [MLVU](https://github.com/JUNJIE99/MLVU)  | [EgoTempo](https://github.com/google-research-datasets/egotempo) | [VidComposition](https://github.com/yunlong10/VidComposition) |
 |:-----------------|:----------:|:------------:|:--------------:|:--------:|:------:|:--------:|:--------------:|
 |   [Video-LLaVA](https://github.com/PKU-YuanGroup/Video-LLaVA)     |      7B    |       32     |        -       |     -    |    -   |     -    |        -       |
@@ -19,11 +24,15 @@
 |     [Qwen2-VL](https://github.com/QwenLM/Qwen-VL)      |      7B    |       32     |        -       |     -    |    -   |     -    |        -       |
 
 
-**Adaptive Keyframe Sampling (AKS, CVPR 2025)**
+---
 
-|     VideoLLMs     |  LLM size  | Input frames | [LongVideoBench](https://github.com/longvideobench/LongVideoBench) | [VideoMME](https://github.com/MME-Benchmarks/Video-MME) |  [MLVU](https://github.com/JUNJIE99/MLVU)  | [EgoTempo](https://github.com/google-research-datasets/egotempo) | [VidComposition](https://github.com/yunlong10/VidComposition) |
-|:-----------------|:----------:|:------------:|:--------------:|:--------:|:------:|:--------:|:--------------:|
-|   [Video-LLaVA](https://github.com/PKU-YuanGroup/Video-LLaVA) + [AKS](https://github.com/ncTimTang/AKS)    |      7B    |       32     |        -       |     -    |    -   |     -    |        -       |
-|    [VideoChat2](https://github.com/OpenGVLab/Ask-Anything/tree/main/video_chat2) + [AKS](https://github.com/ncTimTang/AKS)     |      7B    |       32     |        -       |     -    |    -   |     -    |        -       |
-| [LLaVa-Onevision](https://github.com/LLaVA-VL/LLaVA-NeXT) + [AKS](https://github.com/ncTimTang/AKS)    |      7B    |       32     |        -       |     -    |    -   |     -    |        -       |
-|     [Qwen2-VL](https://github.com/QwenLM/Qwen-VL) + [AKS](https://github.com/ncTimTang/AKS)      |      7B    |       32     |        -       |     -    |    -   |     -    |        -       |
+**Keyframe Sampling Method**
+
+To do. 
+* a
+* b
+* c
+
+1. [[paper](https://arxiv.org/abs/2502.21271)][[code](https://github.com/ncTimTang/AKS)] Adaptive Keyframe Sampling for Long Video Understanding (AKS, CVPR 2025) 
+2. [[paper](https://arxiv.org/abs/2504.02259)][[code](https://github.com/LongVideoHaystack/TStar)] Re-thinking Temporal Search for Long-Form Video Understanding (Tstar, CVPR 2025)
+3. [[paper](https://arxiv.org/abs/2405.19209)][[code](https://github.com/Ziyang412/VideoTree)] VideoTree: Adaptive Tree-based Video Representation for LLM Reasoning on Long Videos (VideoTree, CVPR 2025)
