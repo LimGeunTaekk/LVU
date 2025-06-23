@@ -30,7 +30,17 @@ To do.
 
 (To do.) 
 * Build a unified environment
-* Buiod a unified code framework
+
+```Shell
+git clone https://github.com/Yui010206/SeViLA.git
+cd SeViLA
+pip install -e .
+pip install numpy==1.24.4
+pip install spacy
+```
+
+
+* Build a unified code framework
 
 1. [[paper](https://arxiv.org/abs/2502.21271)][[code](https://github.com/ncTimTang/AKS)] Adaptive Keyframe Sampling for Long Video Understanding (AKS, CVPR 2025) 
 2. [[paper](https://arxiv.org/abs/2504.02259)][[code](https://github.com/LongVideoHaystack/TStar)] Re-thinking Temporal Search for Long-Form Video Understanding (Tstar, CVPR 2025)
