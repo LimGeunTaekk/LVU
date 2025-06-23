@@ -37,6 +37,7 @@ cd SeViLA
 pip install -e . # remove sapcy in requirements.txt
 pip install numpy==1.24.4
 pip install spacy==3.7.4
+pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu118
 ```
 
 
