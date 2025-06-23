@@ -28,15 +28,15 @@ To do.
 
 **Keyframe Sampling Method**
 
-(To do.) 
-* Build a unified environment
+Build a unified environment (CUDA 11.8, Ubuntu 18.04)
 
 ```Shell
+# For AKS build
 git clone https://github.com/Yui010206/SeViLA.git
 cd SeViLA
-pip install -e .
+pip install -e . # remove sapcy in requirements.txt
 pip install numpy==1.24.4
-pip install spacy
+pip install spacy==3.7.4
 ```
 
 
