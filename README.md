@@ -30,6 +30,11 @@ To do.
 
 **Keyframe Sampling Method**
 
+1. [[paper](https://arxiv.org/abs/2502.21271)][[code](https://github.com/ncTimTang/AKS)] Adaptive Keyframe Sampling for Long Video Understanding (AKS, CVPR 2025) 
+2. [[paper](https://arxiv.org/abs/2504.02259)][[code](https://github.com/LongVideoHaystack/TStar)] Re-thinking Temporal Search for Long-Form Video Understanding (Tstar, CVPR 2025)
+3. [[paper](https://arxiv.org/abs/2405.19209)][[code](https://github.com/Ziyang412/VideoTree)] VideoTree: Adaptive Tree-based Video Representation for LLM Reasoning on Long Videos (VideoTree, CVPR 2025)
+
+
 Build a unified environment 
 * CUDA 11.8
 * Ubuntu 18.04
@@ -90,8 +95,6 @@ wget -O data/texts/lvis_v1_class_texts.json https://github.com/AILab-CVC/YOLO-Wo
 # mmcv, transformer version issue check (optional)
 pip install -U git+https://github.com/huggingface/transformers,
 pip install "mmcv==v2.0.0rc4" # -std=c++17 should be modified (refer to. https://github.com/open-mmlab/mmcv/issues/2860)
-
-python run_TStar_onDataset.py     --video_path ../kfs-train-clip/0a060760-c33f-4160-8719-25725b570043.mp4     --question "What color is my gloves?"     --options "A) Green\nB) Yellow\nC) Blue\nD) Brown\n"
 ```
 
 
@@ -100,6 +103,3 @@ Build a unified code framework
 * Input : Raw Video + Question
 * Output : Keyframe Index
 
-1. [[paper](https://arxiv.org/abs/2502.21271)][[code](https://github.com/ncTimTang/AKS)] Adaptive Keyframe Sampling for Long Video Understanding (AKS, CVPR 2025) 
-2. [[paper](https://arxiv.org/abs/2504.02259)][[code](https://github.com/LongVideoHaystack/TStar)] Re-thinking Temporal Search for Long-Form Video Understanding (Tstar, CVPR 2025)
-3. [[paper](https://arxiv.org/abs/2405.19209)][[code](https://github.com/Ziyang412/VideoTree)] VideoTree: Adaptive Tree-based Video Representation for LLM Reasoning on Long Videos (VideoTree, CVPR 2025)
