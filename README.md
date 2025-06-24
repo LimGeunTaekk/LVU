@@ -41,7 +41,9 @@ pip install -e . # remove sapcy in requirements.txt
 pip install numpy==1.24.4
 pip install spacy==3.7.4
 pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu118
+```
 
+```Shell
 # For VideoTree build
 pip install openai
 pip install pandas
@@ -49,7 +51,8 @@ pip install accelerate
 git clone https://github.com/subhadarship/kmeans_pytorch # replace the init file in "kmeans_pytorch" folder with the file we provide in "./kmeans_pytorch" folder (this repo)
 cd kmeans_pytorch
 pip install --editable .
-
+```
+```Shell
 # For Tstar build
 git clone --recursive https://github.com/AILab-CVC/YOLO-World.git
 
@@ -83,7 +86,6 @@ mkdir -p data/texts
 wget -O data/texts/lvis_v1_class_texts.json https://github.com/AILab-CVC/YOLO-World/raw/refs/heads/master/data/texts/lvis_v1_class_texts.json
 
 # mmcv, transformer version issue check (pip install -U git+https://github.com/huggingface/transformers, "mmcv==2.1.0"
-
 
 python run_TStar_onDataset.py     --video_path ../kfs-train-clip/0a060760-c33f-4160-8719-25725b570043.mp4     --question "What color is my gloves?"     --options "A) Green\nB) Yellow\nC) Blue\nD) Brown\n"
 ```
