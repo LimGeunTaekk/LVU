@@ -3,7 +3,9 @@
 ## Problem 1. Keyframe Selection
 **Motivation**
 * Current video question answering problems can be addressed with a few keyframes (LongVideoBench, VideoMME, EgoSchema)
-* Current Query-matching paradigms are sub-optimal (CLIP, BLIP)
+    * The depth of understanding of the same video content can differ depending on the type of question being asked
+* Current Query-matching paradigms are sub-optimal 
+    * Scene prior contextual cue might be the soluiton to adaptive keyframe sampling
 
 **Goal** : We aim to build a spatio-temporal composition-aware method that supports diverse VQA benchmark
 
