@@ -85,7 +85,9 @@ wget -O data/coco/lvis/lvis_v1_minival_inserted_image_name.json https://huggingf
 mkdir -p data/texts
 wget -O data/texts/lvis_v1_class_texts.json https://github.com/AILab-CVC/YOLO-World/raw/refs/heads/master/data/texts/lvis_v1_class_texts.json
 
-# mmcv, transformer version issue check (pip install -U git+https://github.com/huggingface/transformers, "mmcv==2.1.0"
+# mmcv, transformer version issue check (optional)
+pip install -U git+https://github.com/huggingface/transformers,
+pip install "mmcv==v2.0.0rc4" # -std=c++17 should be modified (refer to. https://github.com/open-mmlab/mmcv/issues/2860)
 
 python run_TStar_onDataset.py     --video_path ../kfs-train-clip/0a060760-c33f-4160-8719-25725b570043.mp4     --question "What color is my gloves?"     --options "A) Green\nB) Yellow\nC) Blue\nD) Brown\n"
 ```
