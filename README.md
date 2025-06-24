@@ -93,7 +93,10 @@ python run_TStar_onDataset.py     --video_path ../kfs-train-clip/0a060760-c33f-4
 ```
 
 
-* Build a unified code framework
+Build a unified code framework
+
+* Input : Raw Video + Question
+* Output : Keyframe Index
 
 1. [[paper](https://arxiv.org/abs/2502.21271)][[code](https://github.com/ncTimTang/AKS)] Adaptive Keyframe Sampling for Long Video Understanding (AKS, CVPR 2025) 
 2. [[paper](https://arxiv.org/abs/2504.02259)][[code](https://github.com/LongVideoHaystack/TStar)] Re-thinking Temporal Search for Long-Form Video Understanding (Tstar, CVPR 2025)
