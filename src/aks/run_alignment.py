@@ -30,7 +30,6 @@ def parse_arguments():
 
 
 def main(args):
-    import pdb;pdb.set_trace()
     if args.dataset_name =="longvideobench":
        label_path = os.path.join(args.dataset_path,'lvb_val.json')
        video_path = os.path.join(args.dataset_path,'videos')
@@ -41,7 +40,7 @@ def main(args):
        label_path = os.path.join(args.dataset_path,'egotempo_openQA.json')
        video_path = os.path.join(args.dataset_path,'trimmed_clips')
     elif args.dataset_name =="MLVU":
-       label_path = os.path.join(args.dataset_path,'test_mcq_gt.json')
+       label_path = os.path.join(args.dataset_path,'test-ground-truth','test_mcq_gt.json')
        video_path = os.path.join(args.dataset_path,'video')
     elif args.dataset_name =="VidComposition":
        label_path = os.path.join(args.dataset_path,'multi_choice.json')

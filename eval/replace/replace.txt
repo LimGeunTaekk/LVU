@@ -1,0 +1,15 @@
+[Eval]
+lmms_eval/api/task.py
+lmms_eval/evaluator.py
+
+[Data]
+lmms_eval/tasks/longvideobench/longvideobench_val_v.yaml
+lmms_eval/tasks/longvideobench/longvideobench_val_i.yaml
+lmms_eval/tasks/longvideobench/utils.py
+
+lmms_eval/tasks/videomme/videomme.yaml
+lmms_eval/tasks/videomme/utils.py
+
+[Model]
+lmms_eval/models/qwen2_vl.py
+lmms_eval/lmms_eval/models/model_utils <- qwen2_load_video.py (put)

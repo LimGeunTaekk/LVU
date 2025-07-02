@@ -1,5 +1,3 @@
-LICENSE.txt
-MANIFEST.in
 README.md
 pyproject.toml
 requirements.txt
@@ -177,6 +175,17 @@ lavis/datasets/datasets/vg_vqa_datasets.py
 lavis/datasets/datasets/video_caption_datasets.py
 lavis/datasets/datasets/video_vqa_datasets.py
 lavis/datasets/datasets/vqa_datasets.py
+lavis/datasets/download_scripts/download_coco.py
+lavis/datasets/download_scripts/download_didemo.py
+lavis/datasets/download_scripts/download_flickr.py
+lavis/datasets/download_scripts/download_gqa.py
+lavis/datasets/download_scripts/download_msrvtt.py
+lavis/datasets/download_scripts/download_msvd.py
+lavis/datasets/download_scripts/download_nocaps.py
+lavis/datasets/download_scripts/download_sbu.py
+lavis/datasets/download_scripts/download_vg.py
+lavis/datasets/download_scripts/DownloadConceptualCaptions/download_data_cc12m.py
+lavis/datasets/download_scripts/DownloadConceptualCaptions/download_data_cc3m.py
 lavis/models/__init__.py
 lavis/models/base_model.py
 lavis/models/eva_vit.py

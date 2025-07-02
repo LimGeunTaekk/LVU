@@ -46,7 +46,7 @@ class LlavaInterface:
 from typing import List, Optional
 import torch
 from PIL import Image
-from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
+# from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
 # from qwen_vl_utils import process_vision_info
 
 class QwenInterface:
