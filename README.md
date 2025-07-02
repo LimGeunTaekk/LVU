@@ -94,7 +94,9 @@ wget -O data/texts/lvis_v1_class_texts.json https://github.com/AILab-CVC/YOLO-Wo
 
 # mmcv, transformer version issue check (optional)
 pip install -U git+https://github.com/huggingface/transformers,
-pip install "mmcv==v2.0.0rc4" # -std=c++17 should be modified (refer to. https://github.com/open-mmlab/mmcv/issues/2860)
+git clone --branch v2.0.0rc4 https://github.com/open-mmlab/mmcv.git
+# refer to. https://github.com/open-mmlab/mmcv/issues/2860
+pip install -e .
 ```
 
 
