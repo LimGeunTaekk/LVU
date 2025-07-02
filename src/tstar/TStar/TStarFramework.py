@@ -65,14 +65,19 @@ class TStarFramework:
         target_objects, cue_objects = self.get_grounded_objects()
         video_searcher = self.initialize_videoSearcher(target_objects, cue_objects)
         all_frames, time_stamps = self.perform_search(video_searcher, visualization=True)
-        answer = self.perform_qa(all_frames)
-        logger.info(f"Answer: {answer}")
+        # answer = self.perform_qa(all_frames)
+        # logger.info(f"Answer: {answer}")
         
         return {
             "Grounding Objects": {'target_objects': target_objects, 'cue_objects': cue_objects},
             "Frame Timestamps": time_stamps,
-            "Answer": answer
         }
+
+        # return {
+        #     "Grounding Objects": {'target_objects': target_objects, 'cue_objects': cue_objects},
+        #     "Frame Timestamps": time_stamps,
+        #     "Answer": answer
+        # }
 
     def get_grounded_objects(self) -> Tuple[List[str], List[str]]:
         """
