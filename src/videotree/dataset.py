@@ -95,7 +95,7 @@ class NextDataset(BaseDataset):
         return narr
 
     def get_anno(self):
-        return pd.read_csv(self.args.anno_path)  # video,frame_count,width,height,question,answer,qid,type,a0,a1,a2,a3,a4
+        return pd.read_csv(self.args.anno_path)  # video, frame_count, width, height, question, answer, qid, type, a0, a1, a2, a3, a4
          
     def build(self):
         data = []

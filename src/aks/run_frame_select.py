@@ -83,6 +83,9 @@ def main(args):
     with open(args.frame_path) as f:
         fn_outs = json.load(f)
 
+    if not os.path.exists(args.output_file):
+        os.mkdir(args.output_file)
+
     if not os.path.exists(os.path.join(args.output_file,args.dataset_name)):
         os.mkdir(os.path.join(args.output_file,args.dataset_name))
     out_score_path = os.path.join(args.output_file,args.dataset_name,args.extract_feature_model)

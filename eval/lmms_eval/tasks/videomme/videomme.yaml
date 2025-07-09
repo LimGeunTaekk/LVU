@@ -1,8 +1,9 @@
-dataset_path: lmms-lab/Video-MME
+dataset_path: ../data/prior_bench/25CVPR_VideoMME/videomme/
 dataset_kwargs:
-  token: True
+  data_files: {"test" : include_frame_idx.json}
+  token: False
   cache_dir: videomme
-  video: True
+  video: False
   # From_YouTube: True
 task: videomme
 test_split: test

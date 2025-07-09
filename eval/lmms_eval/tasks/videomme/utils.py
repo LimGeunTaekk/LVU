@@ -65,6 +65,7 @@ TASK_CATEGORIES = [
     "Information Synopsis",
 ]
 
+
 replace_prompt = " Please answer yes or no."
 
 # with open(Path(__file__).parent / "_default_template_yaml", "r") as f:
@@ -77,10 +78,11 @@ replace_prompt = " Please answer yes or no."
 
 #     config = yaml.safe_load("".join(safe_data))
 
-hf_home = os.getenv("HF_HOME", "~/.cache/huggingface/")
+# hf_home = os.getenv("HF_HOME", "~/.cache/huggingface/")
 # cache_dir = os.path.join(hf_home, cache_dir)
 # base_cache_dir = config["dataset_kwargs"]["cache_dir"]
-base_cache_dir = os.path.expanduser(hf_home)
+# base_cache_dir = os.path.expanduser(hf_home)
+base_cache_dir = '../data/prior_bench/25CVPR_VideoMME/'
 with open(Path(__file__).parent / "videomme.yaml", "r") as f:
     raw_data = f.readlines()
     safe_data = []
@@ -89,7 +91,6 @@ with open(Path(__file__).parent / "videomme.yaml", "r") as f:
         if "!function" not in line:
             safe_data.append(line)
 cache_name = yaml.safe_load("".join(safe_data))["dataset_kwargs"]["cache_dir"]
-
 
 def parse_subtitle_time(time_str):
     h, m, s_ms = time_str.split(":")

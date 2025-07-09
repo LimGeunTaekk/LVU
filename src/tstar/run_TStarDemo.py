@@ -45,7 +45,7 @@ def main():
     
     args = parser.parse_args()
 
-    args.output_dir = os.path.join(args.output_dir,args.dataset_name)
+    args.output_dir = os.path.join(args.output_dir,args.dataset_name + f'_search_nframes_{args.search_nframes}')
 
     if args.dataset_name =="longvideobench":
        label_path = os.path.join(args.dataset_path,'lvb_val.json')
@@ -77,9 +77,13 @@ def main():
 
     for data in tqdm.tqdm(datas):
         # Run the TStar search process
+        if os.path.isdir(os.path.join(args.output_dir, data['video'].split('.')[0], data['question_id'])) == True:
+            continue
+
         results = run_tstar(
             video_path=os.path.join(video_path,data['video']),
             question=data['question'],
+            question_id=data['question_id'],
             options=list_to_labeled_string(data['candidates']),
             grounder=args.grounder,
             heuristic=args.heuristic,

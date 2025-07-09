@@ -683,6 +683,7 @@ class ConfigurableTask(Task):
         config: Optional[dict] = None,
         model_name: Optional[str] = None,
     ) -> None:  # TODO no super() call here
+
         # Get pre-configured attributes
         self._config = self.CONFIG
 
@@ -1056,6 +1057,12 @@ class ConfigurableTask(Task):
                 download_config=download_config,
                 **dataset_kwargs if dataset_kwargs is not None else {},
             )
+
+        # gtlim @ 2025-07-03
+        # self.dataset = datasets.load_dataset(
+        #     path=self.DATASET_PATH,
+        #     data_files=dataset_kwargs['data_files']
+        # )
 
         if self.config.process_docs is not None:
             for split in self.dataset:

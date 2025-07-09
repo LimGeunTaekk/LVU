@@ -16,7 +16,8 @@ from lmms_eval.tasks._task_utils.file_utils import generate_submission_file
 
 hf_home = os.getenv("HF_HOME", "./~/.cache/huggingface")
 # hf_home="/share/junjie/shuyan/lmms-eval/~/.cache/huggingface"
-base_cache_dir = os.path.expanduser(hf_home)
+# base_cache_dir = os.path.expanduser(hf_home)
+base_cache_dir = '/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/recent_bench/25CVPR_MLVU/mlvu_test'
 
 
 with open(Path(__file__).parent / "mlvu_dev.yaml", "r") as f:
@@ -28,7 +29,6 @@ with open(Path(__file__).parent / "mlvu_dev.yaml", "r") as f:
             safe_data_dev.append(line)
 cache_name_dev = yaml.safe_load("".join(safe_data_dev))["dataset_kwargs"]["cache_dir"]
 cache_dir_dev = os.path.join(base_cache_dir, cache_name_dev)
-
 
 with open(Path(__file__).parent / "mlvu_test.yaml", "r") as f:
     raw_data_test = f.readlines()

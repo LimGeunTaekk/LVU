@@ -536,7 +536,6 @@ def get_task_dict(
     :return
         Dictionary of task objects
     """
-
     task_name_from_string_dict = {}
     task_name_from_config_dict = {}
     task_name_from_object_dict = {}
@@ -551,13 +550,12 @@ def get_task_dict(
 
     string_task_name_list = [task for task in task_name_list if isinstance(task, str)]
     others_task_name_list = [task for task in task_name_list if not isinstance(task, str)]
+
     if len(string_task_name_list) > 0:
         if task_manager is None:
             task_manager = TaskManager()
 
-        task_name_from_string_dict = task_manager.load_task_or_group(
-            string_task_name_list,
-        )
+        task_name_from_string_dict = task_manager.load_task_or_group(string_task_name_list,)
 
     for task_element in others_task_name_list:
         if isinstance(task_element, dict):

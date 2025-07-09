@@ -29,6 +29,7 @@ class TStarFramework:
         heuristic: HeuristicInterface,
         grounder: TStarUniversalGrounder,
         question: str,
+        question_id: str,
         options: str,
         search_nframes: int = 8,
         grid_rows: int = 4,
@@ -45,7 +46,7 @@ class TStarFramework:
         self.search_nframes = search_nframes
         self.grid_rows = grid_rows
         self.grid_cols = grid_cols
-        self.output_dir = os.path.join(output_dir, os.path.basename(video_path).split('.')[0], question[:-1])
+        self.output_dir = os.path.join(output_dir, os.path.basename(video_path).split('.')[0], question_id)
         self.confidence_threshold = confidence_threshold
         self.search_budget = search_budget
         self._create_output_dir()
@@ -195,6 +196,7 @@ def initialize_heuristic(heuristic_type: str = "owl-vit") -> HeuristicInterface:
 def run_tstar(
     video_path: str,
     question: str,
+    question_id : str,
     options: str,
     grounder: str = "gpt-4o",
     heuristic: str = "owl-vit",
@@ -216,6 +218,7 @@ def run_tstar(
         grounder=grounder,
         heuristic=heuristic,
         question=question,
+        question_id=question_id,
         options=options,
         search_nframes=search_nframes,
         grid_rows=grid_rows,

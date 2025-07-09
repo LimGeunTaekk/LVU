@@ -34,9 +34,9 @@ def parse_args():
     parser.add_argument("--dataset", default='egoschema', type=str)  # 'egoschema', 'nextqa', 'nextgqa', 'intentqa'
 
     # subset
-    parser.add_argument("--data_path", default='./data/egoschema/lavila_subset.json', type=str) 
-    parser.add_argument("--anno_path", default='./data/egoschema/subset_anno.json', type=str)
-    parser.add_argument("--duration_path", default='./data/egoschema/duration.json', type=str) 
+    parser.add_argument("--data_path", default='/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/keyframe/videotree/egoschema/lavila_subset.json', type=str) 
+    parser.add_argument("--anno_path", default='/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/keyframe/videotree/egoschema/subset_anno.json', type=str)
+    parser.add_argument("--duration_path", default='/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/keyframe/videotree/egoschema/duration.json', type=str) 
 
     # # fullset  
     # parser.add_argument("--data_path", default='/data/path/lavila_fullset.json', type=str) 
@@ -44,6 +44,7 @@ def parse_args():
     # parser.add_argument("--duration_path", default='/data/path/duration.json', type=str) 
     parser.add_argument("--fps", default=1.0, type=float) 
     parser.add_argument("--num_examples_to_run", default=-1, type=int)
+
     ## backup pred
     parser.add_argument("--backup_pred_path", default="", type=str)
     ## fewshot
@@ -70,10 +71,11 @@ def parse_args():
 
     # prompting
     parser.add_argument("--model", default="gpt-3.5-turbo-0125", type=str)
-    parser.add_argument("--api_key", default="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", type=str)
+    parser.add_argument("--api_key", default="", type=str)
     parser.add_argument("--temperature", default=0.0, type=float)
     parser.add_argument("--prompt_type", default="qa_standard", type=str)
     parser.add_argument("--task", default="qa", type=str)  # sum, qa, gqa
+
     ## sum
     parser.add_argument("--num_words_in_sum", default=500, type=int)  
 

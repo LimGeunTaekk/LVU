@@ -91,7 +91,7 @@ class PromptTemplate(object):
     def fill(self, **kwargs):
         # match variable names: duration, narration, question, optionA, optionB, optionC, optionD, optionE, num_words
         prompt_filled = []
-
+        import pdb;pdb.set_trace()
 
         if 'loc_pred' in kwargs and 'narration' in kwargs and kwargs['loc_pred'] is not None and kwargs['narration'] is not None:
             narration = kwargs['narration']
@@ -106,6 +106,7 @@ class PromptTemplate(object):
                 if i + 1 < len(parts):
                     captions.append(parts[i] + parts[i + 1])
 
+            import pdb;pdb.set_trace()
             # Extract relevant captions based on loc_pred indices
             loc_caption = [captions[i - 1] for i in kwargs['loc_pred'] if i > 0 and i <= len(captions)]
 
@@ -114,6 +115,9 @@ class PromptTemplate(object):
 
         for temp in self.prompt_template:
             prompt_filled.append(temp.substitute(kwargs))
+
+        import pdb;pdb.set_trace()
+
         return prompt_filled
 
 
