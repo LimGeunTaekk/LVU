@@ -77,44 +77,47 @@ def main():
 
     for data in tqdm.tqdm(datas):
         # Run the TStar search process
-        if os.path.isdir(os.path.join(args.output_dir, data['video'].split('.')[0], data['question_id'])) == True:
+        if os.path.isdir(os.path.join(args.output_dir, data['video'].split('.')[0], data['question_id'], 'frames')) == True:
             continue
 
-        results = run_tstar(
-            video_path=os.path.join(video_path,data['video']),
-            question=data['question'],
-            question_id=data['question_id'],
-            options=list_to_labeled_string(data['candidates']),
-            grounder=args.grounder,
-            heuristic=args.heuristic,
-            search_nframes=args.search_nframes,
-            grid_rows=args.grid_rows,
-            grid_cols=args.grid_cols,
-            confidence_threshold=args.confidence_threshold,
-            search_budget=args.search_budget,
-            output_dir=args.output_dir,
-        )
+        try:
+            results = run_tstar(
+                video_path=os.path.join(video_path,data['video']),
+                question=data['question'],
+                question_id=data['question_id'],
+                options=list_to_labeled_string(data['candidates']),
+                grounder=args.grounder,
+                heuristic=args.heuristic,
+                search_nframes=args.search_nframes,
+                grid_rows=args.grid_rows,
+                grid_cols=args.grid_cols,
+                confidence_threshold=args.confidence_threshold,
+                search_budget=args.search_budget,
+                output_dir=args.output_dir,
+            )
 
-        # Display the results
-        print("#"*20)
-        print(f"Input Quetion: {data['question']}")
-        print(f"Input Options: {list_to_labeled_string(data['candidates'])}")
-        print("#"*20)
-        print("T* Searching Results:")
-        print(f"Grounding Objects: {results['Grounding Objects']}")
-        print(f"Frame Timestamps: {results['Frame Timestamps']}")
-        # print(f"Answer: {results['Answer']}") # remove QA part (money issue..)
+            # Display the results
+            print("#"*20)
+            print(f"Input Quetion: {data['question']}")
+            print(f"Input Options: {list_to_labeled_string(data['candidates'])}")
+            print("#"*20)
+            print("T* Searching Results:")
+            print(f"Grounding Objects: {results['Grounding Objects']}")
+            print(f"Frame Timestamps: {results['Frame Timestamps']}")
+            # print(f"Answer: {results['Answer']}") # remove QA part (money issue..)
 
-        search_results.append({
-            "question" : data['question'],
-            "question_id" : data['question_id'],
-            "video" : data['video'],
-            "keyframe_idx" : results['Frame Timestamps'],
-            "grounding_objects" : results['Grounding Objects']
-        })
+            search_results.append({
+                "question" : data['question'],
+                "question_id" : data['question_id'],
+                "video" : data['video'],
+                "keyframe_idx" : results['Frame Timestamps'],
+                "grounding_objects" : results['Grounding Objects']
+            })
+        except:
+            continue
 
-    with open(os.path.join(args.output_dir,'results.pkl'), 'wb') as f:
-        pickle.dump(search_results, f, protocol=pickle.HIGHEST_PROTOCOL)
+    # with open(os.path.join(args.output_dir,'results.pkl'), 'wb') as f:
+    #     pickle.dump(search_results, f, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 if __name__ == "__main__":
