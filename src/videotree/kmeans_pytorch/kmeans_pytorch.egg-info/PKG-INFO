@@ -1,16 +1,23 @@
-Metadata-Version: 2.1
-Name: kmeans-pytorch
+Metadata-Version: 2.4
+Name: kmeans_pytorch
 Version: 0.3
-Summary: UNKNOWN
 Home-page: https://github.com/subhadarship/kmeans_pytorch
 Author: Subhadarshi
 Author-email: subhadarshipanda08@gmail.com
 License: License :: OSI Approved :: MIT License
-Platform: UNKNOWN
 Classifier: Programming Language :: Python
 Requires-Python: >=3.6
 Description-Content-Type: text/markdown
 License-File: LICENSE
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-python
 
 # K Means using PyTorch
 PyTorch implementation of kmeans for utilizing GPU
@@ -71,5 +78,3 @@ see [`cpu_vs_gpu.ipynb`](https://github.com/subhadarship/kmeans_pytorch/blob/mas
 
 # License
 [MIT](https://github.com/subhadarship/kmeans_pytorch/blob/master/LICENSE)
-
-

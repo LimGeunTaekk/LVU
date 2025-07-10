@@ -11,3 +11,4 @@ kmeans_pytorch.egg-info/dependency_links.txt
 kmeans_pytorch.egg-info/entry_points.txt
 kmeans_pytorch.egg-info/not-zip-safe
 kmeans_pytorch.egg-info/top_level.txt
+tests/test_project.py

@@ -27,11 +27,9 @@ Requires-Dist: numpy
 Requires-Dist: opencv-python
 Requires-Dist: supervision==0.19.0
 Requires-Dist: openmim
-Requires-Dist: mmcv-lite>=2.0.0rc4
 Requires-Dist: mmdet==3.0.0
 Requires-Dist: mmengine>=0.7.1
 Requires-Dist: openmim
-Requires-Dist: mmcv==2.0.0rc4
 Requires-Dist: mmyolo@ git+https://github.com/onuralpszr/mmyolo.git
 Dynamic: license-file
 
