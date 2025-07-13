@@ -249,7 +249,7 @@ def simple_evaluate(
             chat_template=lm.chat_template if apply_chat_template else None,
             fewshot_as_multiturn=fewshot_as_multiturn,
         )
-
+    
     results = evaluate(
         lm=lm,
         task_dict=task_dict,
@@ -420,6 +420,7 @@ def evaluate(
             task_group_alias[group_name] = configs[task_name]["group_alias"]
 
         limit = get_sample_size(task, limit)
+
         task.build_all_requests(
             limit=limit,
             rank=lm.rank,
@@ -471,7 +472,6 @@ def evaluate(
         if (lm.world_size > 1) and (padding_requests[reqtype] > 0):
             for _ in range(padding_requests[reqtype]):
                 cloned_reqs.extend([req] * req.repeats)
-
         # run requests through model
         resps = getattr(lm, reqtype)(cloned_reqs)  # Choiszt run generate until
 

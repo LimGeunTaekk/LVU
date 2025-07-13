@@ -23,7 +23,7 @@ from lmms_eval.api.registry import register_model
 from lmms_eval.models.model_utils.load_video import read_video_pyav_base64
 
 try:
-    from qwen_vl_utils import process_vision_info
+    from lmms_eval.models.qwen_vision_info import process_vision_info
 except ImportError:
     eval_logger.warning("Failed to import qwen_vl_utils; Please install it via `pip install qwen-vl-utils`")
 
@@ -201,6 +201,9 @@ class Qwen2_5_VL(lmms):
             task = task[0]
             split = split[0]
             visual_list = [doc_to_visual[0](self.task_dict[task][split][ids]) for ids in doc_id]
+            # visual_list[0][0] = '../data/mlvu_test/video/test_cartoon_10.mp4'
+            vid_name = visual_list[0][0].split('/')[-1]
+            print("[START] Video Name : {:20s}".format(vid_name))
             gen_kwargs = all_gen_kwargs[0]
 
             # Set default until or update values from gen_kwargs if present
@@ -280,16 +283,21 @@ class Qwen2_5_VL(lmms):
                 batched_messages.append(message)
 
             texts = [self.processor.apply_chat_template(msg, tokenize=False, add_generation_prompt=True) for msg in batched_messages]
-            image_inputs, video_inputs = process_vision_info(batched_messages)
-            if video_inputs is not None:
-                total_frames = video_inputs[0].shape[0]
-                indices = np.linspace(0, total_frames - 1, self.max_num_frames, dtype=int)
-                # Append the last frame index if not already included
-                if total_frames - 1 not in indices:
-                    indices = np.append(indices, total_frames - 1)
-                video_inputs[0] = video_inputs[0][indices]
-            inputs = self.processor(text=texts, images=image_inputs, videos=video_inputs, padding=True, return_tensors="pt")
 
+            indices = np.linspace(0, len(vr) - 1, self.max_num_frames, dtype=int)
+            image_inputs, video_inputs = process_vision_info(batched_messages, indices) # gtlim 
+
+            # gtlim
+            # if video_inputs is not None:
+            #     total_frames = video_inputs[0].shape[0]
+            #     indices = np.linspace(0, total_frames - 1, self.max_num_frames, dtype=int)
+            #     # Append the last frame index if not already included
+            #     if total_frames - 1 not in indices:
+            #         indices = np.append(indices, total_frames - 1)
+            #     video_inputs[0] = video_inputs[0][indices]
+
+            inputs = self.processor(text=texts, images=image_inputs, videos=video_inputs, padding=True, return_tensors="pt")
+            
             if self.device_map == "auto":
                 inputs = inputs.to("cuda")
             else:
@@ -324,7 +332,7 @@ class Qwen2_5_VL(lmms):
                 max_new_tokens=current_gen_kwargs["max_new_tokens"],
                 use_cache=self.use_cache,
             )
-
+            
             generated_ids_trimmed = [out_ids[len(in_ids) :] for in_ids, out_ids in zip(inputs.input_ids, cont)]
             answers = self.processor.batch_decode(generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False)
             for i, ans in enumerate(answers):
@@ -337,6 +345,9 @@ class Qwen2_5_VL(lmms):
                 res.append(ans)
                 self.cache_hook.add_partial("generate_until", (context, gen_kwargs), ans)
                 pbar.update(1)
+
+            print("[SUCCESS] Video Name : {:20s}".format(vid_name))
+
             # reorder this group of results back to original unsorted form
         res = re_ords.get_original(res)
 
