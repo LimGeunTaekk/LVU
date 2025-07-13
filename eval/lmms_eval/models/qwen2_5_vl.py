@@ -231,6 +231,7 @@ class Qwen2_5_VL(lmms):
                     context = context.strip() + self.reasoning_prompt
                     contexts[i] = context
 
+                import pdb;pdb.set_trace()
                 processed_visuals = []
                 for visual in visual_list[i]:
                     if isinstance(visual, str) and visual.endswith((".mp4", ".avi", ".mov")):  # Video file
