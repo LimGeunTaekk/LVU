@@ -437,6 +437,7 @@ def evaluate(
         if write_out:
             print_writeout(task)
         # aggregate Instances by LM method requested to get output.
+
         for instance in task.instances:
             reqtype = instance.request_type
             requests[reqtype].append(instance)

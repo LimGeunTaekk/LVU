@@ -179,7 +179,6 @@ class Qwen2_5_VL(lmms):
 
     def generate_until(self, requests: List[Instance]) -> List[str]:
         res = []
-
         def _collate(x):
             # the negative sign on len(toks) sorts descending - this has a few advantages:
             # - time estimates will always be over not underestimates, which is more useful for planning
@@ -196,14 +195,14 @@ class Qwen2_5_VL(lmms):
         # in the same batch.
         re_ords = utils.Collator([reg.args for reg in requests], _collate, grouping=True)
         chunks = re_ords.get_batched(n=self.batch_size, batch_fn=None)
+                
         for chunk in chunks:
             contexts, all_gen_kwargs, doc_to_visual, doc_id, task, split = zip(*chunk)
             task = task[0]
             split = split[0]
             visual_list = [doc_to_visual[0](self.task_dict[task][split][ids]) for ids in doc_id]
-            # visual_list[0][0] = '../data/mlvu_test/video/test_cartoon_10.mp4'
-            vid_name = visual_list[0][0].split('/')[-1]
-            print("[START] Video Name : {:20s}".format(vid_name))
+            qa_dict = [self.task_dict[task][split][ids] for ids in doc_id]
+
             gen_kwargs = all_gen_kwargs[0]
 
             # Set default until or update values from gen_kwargs if present
@@ -234,7 +233,6 @@ class Qwen2_5_VL(lmms):
                     context = context.strip() + self.reasoning_prompt
                     contexts[i] = context
 
-                import pdb;pdb.set_trace()
                 processed_visuals = []
                 for visual in visual_list[i]:
                     if isinstance(visual, str) and visual.endswith((".mp4", ".avi", ".mov")):  # Video file
@@ -284,7 +282,12 @@ class Qwen2_5_VL(lmms):
 
             texts = [self.processor.apply_chat_template(msg, tokenize=False, add_generation_prompt=True) for msg in batched_messages]
 
-            indices = np.linspace(0, len(vr) - 1, self.max_num_frames, dtype=int)
+            if 'indices' not in qa_dict[0].keys():
+                indices = np.linspace(0, len(vr) - 1, self.max_num_frames, dtype=int)
+            else:
+                indices = qa_dict[0]['indices']
+                indices = [int(idx) for idx in indices]
+
             image_inputs, video_inputs = process_vision_info(batched_messages, indices) # gtlim 
 
             # gtlim
@@ -296,7 +299,8 @@ class Qwen2_5_VL(lmms):
             #         indices = np.append(indices, total_frames - 1)
             #     video_inputs[0] = video_inputs[0][indices]
 
-            inputs = self.processor(text=texts, images=image_inputs, videos=video_inputs, padding=True, return_tensors="pt")
+            inputs = self.processor(text=texts, images=None, videos=None, padding=True, return_tensors="pt")
+            # inputs = self.processor(text=texts, images=image_inputs, videos=video_inputs, padding=True, return_tensors="pt")
             
             if self.device_map == "auto":
                 inputs = inputs.to("cuda")
@@ -345,8 +349,6 @@ class Qwen2_5_VL(lmms):
                 res.append(ans)
                 self.cache_hook.add_partial("generate_until", (context, gen_kwargs), ans)
                 pbar.update(1)
-
-            print("[SUCCESS] Video Name : {:20s}".format(vid_name))
 
             # reorder this group of results back to original unsorted form
         res = re_ords.get_original(res)

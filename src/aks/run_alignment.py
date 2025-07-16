@@ -147,12 +147,13 @@ def main(args):
                 sevila_score = float(model.generate_score(samples).squeeze(0).squeeze(0))
                 score.append(sevila_score)
                 frame_num.append(j*int(fps))
+
         fn.append(frame_num)
         scores.append(score)
         if args.dataset_name =="egotempo":
             videos.append(data['question_id'])
         if args.dataset_name =="MLVU":
-            videos.append(data['video'])
+            videos.append(data['question_id'])
 
 
     with open(frame_path,'w') as f:

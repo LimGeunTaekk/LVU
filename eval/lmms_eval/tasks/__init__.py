@@ -523,7 +523,8 @@ def get_task_dict(
     task_name_list: Union[str, List[Union[str, Dict, Task]]],
     task_manager: Optional[TaskManager] = None,
 ):
-    """Creates a dictionary of task objects from either a name of task, config, or prepared Task object.
+    """
+    Creates a dictionary of task objects from either a name of task, config, or prepared Task object.
 
     :param task_name_list: List[Union[str, Dict, Task]]
         Name of model or LM object, see lmms_eval.models.get_model

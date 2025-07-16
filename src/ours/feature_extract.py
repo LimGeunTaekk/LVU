@@ -43,11 +43,11 @@ def parse_eval_args() -> argparse.Namespace:
 
     parser.add_argument(
         "--input_base_path",
-        default='/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/recent_bench/25CVPR_MLVU/MLVU_Test/video',
+        default='/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/recent_bench/25CVPR_MLVU/mlvu_test/video',
     )
     parser.add_argument(
         "--output_base_path",
-        default='/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/recent_bench/25CVPR_MLVU/MLVU_Test/DINOv2_frame_features',
+        default='/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/recent_bench/25CVPR_MLVU/mlvu_test/DINOv2_frame_features',
     )
     args = parser.parse_args()
     return args
@@ -83,13 +83,12 @@ def save_image_features(img_feats, name_ids, save_folder):
 
 def extract_es(args=None):
     batch_size = 16
-    import pdb;pdb.set_trace()
-    # image_path = "CLIP.png"
     model_name_or_path = args.backbone
+
     if args.backbone == 'BAAI/EVA-CLIP-8B':
         processor = CLIPImageProcessor.from_pretrained("openai/clip-vit-large-patch14")
     else:
-        auto_processor = AutoImageProcessor.from_pretrained(model_name_or_path)
+        processor = AutoImageProcessor.from_pretrained(model_name_or_path)
 
     device = "cuda" if torch.cuda.is_available() else "cpu" 
 
@@ -121,11 +120,16 @@ def extract_es(args=None):
             input_pixels = processor(images=frame, return_tensors="pt", padding=True).pixel_values.to('cuda')
 
             with torch.no_grad(), torch.cuda.amp.autocast():
-                image_features = model.encode_image(input_pixels)
+                if args.backbone == 'BAAI/EVA-CLIP-8B':
+                    image_features = model.encode_image(input_pixels)
+                elif args.backbone == 'facebook/dinov2-giant':
+                    image_features = model(input_pixels)
+                    image_features = image_features.pooler_output.detach().cpu()
+
                 img_feature_list.extend(image_features)
 
         img_feature_tensor = torch.stack(img_feature_list)
-        img_feats = img_feature_tensor.squeeze(1).detach().cpu()
+        img_feats = img_feature_tensor.squeeze(1)
 
         save_image_features(img_feats, video_fp.stem, output_base_path)
         pbar.update(1)
