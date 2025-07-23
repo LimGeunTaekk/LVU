@@ -10,7 +10,7 @@
 
 CUDA_VISIBLE_DEVICES=0 python run_TStarDemo.py \
     --dataset_name MLVU \
-    --dataset_path ../../data/recent_bench/25CVPR_MLVU/mlvu_test \
+    --dataset_path ../../data/mlvu_test \
     --grounder gpt-4o \
     --heuristic owl-vit \
     --search_nframes 8
