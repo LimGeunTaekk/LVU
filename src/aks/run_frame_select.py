@@ -17,8 +17,9 @@ def parse_arguments():
     # Hyperparameter Setting
     parser.add_argument('--max_num_frames', type=int, default=32)
     parser.add_argument('--ratio', type=int, default=1)
-    parser.add_argument('--t1', type=int, default=0.8)
-    parser.add_argument('--t2', type=int, default=-100)
+    parser.add_argument('--coef', type=float, default=0.9)
+    parser.add_argument('--t1', type=float, default=0.8)
+    parser.add_argument('--t2', type=float, default=-100)
     parser.add_argument('--all_depth', type=int, default=5)
     parser.add_argument('--output_file', type=str, default='./selected_frames')
     parser.add_argument('--file_name', type=str, default='selected_frames.json')
@@ -59,6 +60,7 @@ def meanstd(len_scores, dic_scores, n, fns, t1, t2, all_depth):
             else:
                     no_split_scores.append(dic_score)
                     no_split_fn.append(fn)
+
     if len(split_scores) > 0:
             all_split_score, all_split_fn = meanstd(len_scores, split_scores, n, split_fn,t1,t2,all_depth)
     else:
@@ -80,8 +82,6 @@ def main(args):
 
     with open(args.score_path) as f:
         itm_outs = json.load(f)
-    with open(args.frame_path) as f:
-        fn_outs = json.load(f)
 
     if not os.path.exists(args.output_file):
         os.mkdir(args.output_file)
@@ -92,12 +92,16 @@ def main(args):
     if not os.path.exists(os.path.join(args.output_file,args.dataset_name,args.extract_feature_model)):
         os.mkdir(out_score_path)
 
-    for itm_out,fn_out in tqdm.tqdm(zip(itm_outs,fn_outs)):
-        nums = int(len(itm_out)/ratio)
-        new_score = [itm_out[num*ratio] for num in range(nums)]
-        new_fnum = [fn_out[num*ratio] for num in range(nums)]
-        score = new_score
-        fn = new_fnum
+    for qid in tqdm.tqdm(itm_outs.keys()):
+        
+        score = []
+        for si in itm_outs[qid]['score']:
+            qs = si['question_score']
+            cs = np.mean(si['context_score'])
+            sc = args.coef * qs + (1-args.coef) * cs
+            score.append(sc)
+
+        fn = itm_outs[qid]['frame_idx']
         num = max_num_frames
         if len(score) >= num:
             normalized_data = (score - np.min(score)) / (np.max(score) - np.min(score))
@@ -113,13 +117,24 @@ def main(args):
             out.sort()
             if len(out) == 0:
                 import pdb;pdb.set_trace()
-            outs.append(out)
+            outs.append({
+                "qid" : qid,
+                "frame_idx" : out})
         else:
-            outs.append(fn)
+            outs.append({
+                "qid" : qid,
+                "frame_idx" : fn})
 
     score_path = os.path.join(out_score_path,args.file_name)
     with open(score_path,'w') as f:
         json.dump(outs,f)
+
+
+# frame_idx.append({
+#     "vid" : anno['video_id'],
+#     "qid" : qid,
+#     "frame_idx" : indices
+# })
 
 if __name__ == '__main__':
     args = parse_arguments()

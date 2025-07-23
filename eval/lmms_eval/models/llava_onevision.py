@@ -371,14 +371,15 @@ class Llava_OneVision(lmms):
                     new_list.append(j)
         return new_list
 
-    def load_video(self, video_path, max_frames_num):
+    def load_video(self, video_path, max_frames_num, frame_idx=None):
         if type(video_path) == str:
             vr = VideoReader(video_path, ctx=cpu(0))
         else:
             vr = VideoReader(video_path[0], ctx=cpu(0))
-        total_frame_num = len(vr)
-        uniform_sampled_frames = np.linspace(0, total_frame_num - 1, max_frames_num, dtype=int)
-        frame_idx = uniform_sampled_frames.tolist()
+        if frame_idx is None:
+            total_frame_num = len(vr)
+            uniform_sampled_frames = np.linspace(0, total_frame_num - 1, max_frames_num, dtype=int)
+            frame_idx = uniform_sampled_frames.tolist()
         spare_frames = vr.get_batch(frame_idx).asnumpy()
         return spare_frames  # (frames, height, width, channels)
 
@@ -411,6 +412,8 @@ class Llava_OneVision(lmms):
             task = batched_task[0]
             split = batched_split[0]
             batched_visuals = [batched_doc_to_visual[0](self.task_dict[task][split][ids]) for ids in batched_doc_id]  # [B, N]
+            qa_dict = [self.task_dict[task][split][ids] for ids in batched_doc_id]
+
             assert len(batched_visuals) == 1
 
             # we assume all gen kwargs in the batch are the same
@@ -420,7 +423,6 @@ class Llava_OneVision(lmms):
                 gen_kwargs.pop("until")
 
             question_input = []
-            # import ipdb; ipdb.set_trace()
             for visual, context in zip(batched_visuals, batched_contexts):
                 if origin_image_aspect_ratio is not None and self._config.image_aspect_ratio != origin_image_aspect_ratio:
                     self._config.image_aspect_ratio = origin_image_aspect_ratio
@@ -465,7 +467,12 @@ class Llava_OneVision(lmms):
                         image_tensor = []
                         try:
                             if self.video_decode_backend == "decord":
-                                frames = self.load_video(visual, self.max_frames_num)
+                                if 'indices' not in qa_dict[0].keys():
+                                    indices = None
+                                else:
+                                    indices = qa_dict[0]['indices']
+                                    indices = [int(idx) for idx in indices]
+                                frames = self.load_video(visual, self.max_frames_num, frame_idx=indices)
                             elif self.video_decode_backend == "pyav":
                                 frames = read_video_pyav(visual[0], num_frm=self.max_frames_num)
                             frames = self._image_processor.preprocess(frames, return_tensors="pt")["pixel_values"].half().cuda()
@@ -627,7 +634,6 @@ class Llava_OneVision(lmms):
                             ]
                         )
                     )
-                    # import ipdb; ipdb.set_trace()
                     batched_round_res = list(zip(*batched_round_res))  # [(r1_1, r1_2), (r2_1, r2_2), ...]
                     if batched_terminal_singal[0]:  # terminal signal from doc_to_text function
                         break

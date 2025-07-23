@@ -3,6 +3,7 @@ dataset_kwargs:
   token: True
   cache_dir: video
   video: True
+  data_files : /data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/recent_bench/25CVPR_MLVU/mlvu_test/test-ground-truth/test_mcq_gt_buffer.pkl
 generation_kwargs:
   max_new_tokens: 16
   temperature: 0

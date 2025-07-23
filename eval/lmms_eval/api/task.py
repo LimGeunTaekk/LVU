@@ -1,5 +1,6 @@
 import abc
 import ast
+import pickle
 import copy
 import inspect
 import itertools
@@ -29,7 +30,7 @@ from typing import (
 import datasets
 import numpy as np
 from accelerate import Accelerator
-from datasets import Audio, DownloadConfig, Image, Sequence
+from datasets import Audio, DownloadConfig, Image, Sequence, Dataset
 from huggingface_hub import snapshot_download
 from loguru import logger as eval_logger
 from PIL import ImageFile
@@ -1045,24 +1046,30 @@ class ConfigurableTask(Task):
             if "create_link" in dataset_kwargs:
                 dataset_kwargs.pop("create_link")
 
-        if dataset_kwargs is not None and "load_from_disk" in dataset_kwargs and dataset_kwargs["load_from_disk"]:
-            # using local task in offline environment, need to process the online dataset into local format via
-            # `ds = load_datasets("lmms-lab/MMMU")`
-            self.dataset = datasets.load_from_disk(dataset_path=self.DATASET_PATH)
-        else:
-            self.dataset = datasets.load_dataset(
-                path=self.DATASET_PATH,
-                name=self.DATASET_NAME,
-                download_mode=datasets.DownloadMode.REUSE_DATASET_IF_EXISTS,
-                download_config=download_config,
-                **dataset_kwargs if dataset_kwargs is not None else {},
-            )
+        # if dataset_kwargs is not None and "load_from_disk" in dataset_kwargs and dataset_kwargs["load_from_disk"]:
+        #     # using local task in offline environment, need to process the online dataset into local format via
+        #     # `ds = load_datasets("lmms-lab/MMMU")`
+        #     self.dataset = datasets.load_from_disk(dataset_path=self.DATASET_PATH)
+        # else:
+        #     self.dataset = datasets.load_dataset(
+        #         path=self.DATASET_PATH,
+        #         name=self.DATASET_NAME,
+        #         download_mode=datasets.DownloadMode.REUSE_DATASET_IF_EXISTS,
+        #         download_config=download_config,
+        #         **dataset_kwargs if dataset_kwargs is not None else {},
+        #     )
 
-        # gtlim @ 2025-07-03
-        # self.dataset = datasets.load_dataset(
-        #     path=self.DATASET_PATH,
-        #     data_files=dataset_kwargs['data_files']
-        # )
+        dataset = pickle.load(open(dataset_kwargs['data_files'],'rb'))
+        dataset = Dataset.from_list(dataset)
+
+        if self.has_test_docs():
+            split = self.config.test_split
+        elif self.has_validation_docs():
+            split = self.config.validation_split
+        else:
+            assert False, f"Task dataset (path={self.DATASET_PATH}, name={self.DATASET_NAME}) must have valid or test docs!"
+
+        self.dataset = datasets.DatasetDict({split : dataset})
 
         if self.config.process_docs is not None:
             for split in self.dataset:
