@@ -72,13 +72,9 @@ def main(args):
     out_score_path = os.path.join(args.output_file, args.dataset_name + '_' + str(args.fps) + 'fps', args.extract_feature_model)
     os.makedirs(out_score_path, exist_ok=True)
 
-    scores = []
-    fn = []
-    videos = []
+    scores = dict()
 
     score_path = os.path.join(out_score_path,'scores.json')
-    frame_path = os.path.join(out_score_path,'frames.json')
-    vid_path = os.path.join(out_score_path,'videos.json')
 
     for data in tqdm.tqdm(datas):
         
@@ -148,22 +144,13 @@ def main(args):
                 score.append(sevila_score)
                 frame_num.append(j*int(fps))
 
-        fn.append(frame_num)
-        scores.append(score)
-        if args.dataset_name =="egotempo":
-            videos.append(data['question_id'])
-        if args.dataset_name =="MLVU":
-            videos.append(data['question_id'])
-
-
-    with open(frame_path,'w') as f:
-        json.dump(fn,f)
+        scores[data['question_id']] = {
+            "frame_idx" : frame_num,
+            "score" : score
+        }
 
     with open(score_path,'w') as f:
         json.dump(scores,f)
-
-    with open(vid_path,'w') as f:
-        json.dump(videos,f)
 
 if __name__ == '__main__':
     args = parse_arguments()

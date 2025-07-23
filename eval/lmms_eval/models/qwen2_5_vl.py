@@ -299,8 +299,7 @@ class Qwen2_5_VL(lmms):
             #         indices = np.append(indices, total_frames - 1)
             #     video_inputs[0] = video_inputs[0][indices]
 
-            inputs = self.processor(text=texts, images=None, videos=None, padding=True, return_tensors="pt")
-            # inputs = self.processor(text=texts, images=image_inputs, videos=video_inputs, padding=True, return_tensors="pt")
+            inputs = self.processor(text=texts, images=image_inputs, videos=video_inputs, padding=True, return_tensors="pt")
             
             if self.device_map == "auto":
                 inputs = inputs.to("cuda")

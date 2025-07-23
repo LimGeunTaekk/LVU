@@ -468,7 +468,7 @@ class Llava_OneVision(lmms):
                         try:
                             if self.video_decode_backend == "decord":
                                 if 'indices' not in qa_dict[0].keys():
-                                    indices = np.linspace(0, len(vr) - 1, self.max_num_frames, dtype=int)
+                                    indices = None
                                 else:
                                     indices = qa_dict[0]['indices']
                                     indices = [int(idx) for idx in indices]

@@ -7,3 +7,6 @@ eval/flash_attn/
 data
 src/tstar/output
 src/tstar/output/
+src/ours/outscores
+src/ours/outscores/
+
