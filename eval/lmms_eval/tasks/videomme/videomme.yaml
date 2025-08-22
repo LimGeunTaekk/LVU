@@ -1,6 +1,6 @@
-dataset_path: ../data/prior_bench/25CVPR_VideoMME/videomme/
+dataset_path: ../data/benchmarks/25CVPR_VideoMME/videomme/
 dataset_kwargs:
-  data_files: {"test" : include_frame_idx.json}
+  data_files: {"test" : include_frame_idx_buffer.json}
   token: False
   cache_dir: videomme
   video: False

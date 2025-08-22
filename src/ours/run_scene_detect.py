@@ -1,4 +1,5 @@
 
+import glob
 import os
 import tqdm
 import numpy as np
@@ -30,15 +31,15 @@ def parse_eval_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--feat_path",
-        default='../../data/recent_bench/25CVPR_MLVU/mlvu_test/CLIP_frame_features',
+        default='../../data/benchmarks/25CVPR_MLVU/mlvu_test/CLIP_frame_features',
     )
     parser.add_argument(
         "--video_path",
-        default='../../data/recent_bench/25CVPR_MLVU/mlvu_test/video',
+        default='../../data/benchmarks/25CVPR_MLVU/mlvu_test/video',
     )
     parser.add_argument(
         "--output_path",
-        default='../../data/recent_bench/25CVPR_MLVU/mlvu_test/pyscene',
+        default='../../data/benchmarks/25CVPR_MLVU/mlvu_test/pyscene',
     )
     args = parser.parse_args()
     return args
@@ -91,15 +92,21 @@ if __name__ == '__main__':
     if os.path.isdir(os.path.join(args.output_path))==False:
         os.mkdir(os.path.join(args.output_path))
 
-    for vid in tqdm.tqdm(os.listdir(args.video_path)):
-        if os.path.isdir(os.path.join(args.output_path,vid))==False:
-            os.mkdir(os.path.join(args.output_path,vid))
+    root_dir = args.video_path
+    vid_files = glob.glob(os.path.join(root_dir, '**', '*.mp4'), recursive=True)
+    vid_files = [os.path.abspath(p) for p in vid_files]
 
-            vr = VideoReader(os.path.join(args.video_path,vid), ctx=cpu(0))
-            fps = vr.get_avg_fps()
+    for video_path in tqdm.tqdm(vid_files):
+        vid = video_path.split('/')[-1]
+        if os.path.isdir(os.path.join(args.output_path,vid))==False:
+            try:
+                vr = VideoReader(video_path, ctx=cpu(0), num_threads=8)
+                fps = vr.get_avg_fps()
+            except:
+                continue
 
             if args.scene_detector == 'pyscene':
-                scene_list = detect(os.path.join(args.video_path,vid), ContentDetector())
+                scene_list = detect(video_path, ContentDetector())
                 seg_idx = []
                 if len(scene_list) != 0:
                     for seg in scene_list:
@@ -124,5 +131,6 @@ if __name__ == '__main__':
                 'video' : vid,
                 'list' : seg_idx
             }
+            os.mkdir(os.path.join(args.output_path,vid))
             with open(os.path.join(args.output_path, vid, "scene_list.pk"), 'wb') as pk:
                 pickle.dump(results, pk, protocol=pickle.HIGHEST_PROTOCOL)

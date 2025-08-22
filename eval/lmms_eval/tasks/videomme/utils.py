@@ -82,7 +82,7 @@ replace_prompt = " Please answer yes or no."
 # cache_dir = os.path.join(hf_home, cache_dir)
 # base_cache_dir = config["dataset_kwargs"]["cache_dir"]
 # base_cache_dir = os.path.expanduser(hf_home)
-base_cache_dir = '../data/prior_bench/25CVPR_VideoMME/'
+base_cache_dir = '../data/benchmarks/25CVPR_VideoMME/'
 with open(Path(__file__).parent / "videomme.yaml", "r") as f:
     raw_data = f.readlines()
     safe_data = []

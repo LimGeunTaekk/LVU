@@ -20,11 +20,11 @@ def parse_eval_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument(
         "--input_base_path",
-        default='/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/recent_bench/25CVPR_MLVU/MLVU_Test/video',
+        default='/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/benchmarks/25CVPR_MLVU/MLVU_Test/video',
     )
     parser.add_argument(
         "--output_base_path",
-        default='/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/recent_bench/25CVPR_MLVU/MLVU_Test/frames',
+        default='/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/benchmarks/25CVPR_MLVU/MLVU_Test/frames',
     )
     args = parser.parse_args()
     return args

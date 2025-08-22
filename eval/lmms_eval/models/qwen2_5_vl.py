@@ -286,7 +286,10 @@ class Qwen2_5_VL(lmms):
                 indices = np.linspace(0, len(vr) - 1, self.max_num_frames, dtype=int)
             else:
                 indices = qa_dict[0]['indices']
-                indices = [int(idx) for idx in indices]
+                if indices is None:
+                    indices = np.linspace(0, len(vr) - 1, self.max_num_frames, dtype=int)
+                else:
+                    indices = [int(idx) for idx in indices]
 
             image_inputs, video_inputs = process_vision_info(batched_messages, indices) # gtlim 
 
@@ -323,6 +326,10 @@ class Qwen2_5_VL(lmms):
                 current_gen_kwargs["do_sample"] = False
                 current_gen_kwargs["temperature"] = None
                 current_gen_kwargs["top_p"] = None
+
+            # for debug
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            self.model.to(device)
 
             cont = self.model.generate(
                 **inputs,

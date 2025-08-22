@@ -1,0 +1,130 @@
+{
+  "results": {
+    "implicitqa": {
+      "alias": "implicitqa",
+      "videomme_perception_score,none": 45.88969823100936,
+      "videomme_perception_score_stderr,none": "N/A"
+    }
+  },
+  "group_subtasks": {
+    "implicitqa": []
+  },
+  "configs": {
+    "implicitqa": {
+      "task": "implicitqa",
+      "dataset_path": "../data/benchmarks/25arXiv_ImplicitQA",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "ImplicitQAv0.1.2_buffer.json"
+        },
+        "token": false,
+        "cache_dir": "implicitqa",
+        "video": false
+      },
+      "test_split": "test",
+      "full_docs": false,
+      "process_results_use_image": false,
+      "doc_to_visual": "<function videomme_doc_to_visual at 0x7f8e1c0668b0>",
+      "doc_to_text": "<function videomme_doc_to_text at 0x7f8e1c066f70>",
+      "doc_to_target": "answer",
+      "process_results": "<function videomme_process_results at 0x7f8e1c075700>",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "videomme_perception_score",
+          "aggregation": "<function videomme_aggregate_results at 0x7f8e1c075dc0>",
+          "higher_is_better": true
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "max_new_tokens": 16,
+        "temperature": 0.0,
+        "top_p": 1.0,
+        "num_beams": 1,
+        "do_sample": false,
+        "until": [
+          "\n\n"
+        ]
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": [
+        {
+          "version": 0.0
+        }
+      ],
+      "lmms_eval_specific_kwargs": {
+        "default": {
+          "pre_prompt": "",
+          "post_prompt": "\nAnswer with the option's letter from the given choices directly."
+        },
+        "gpt4v": {
+          "pre_prompt": "",
+          "post_prompt": "Answer the question with A, B, C, or D."
+        },
+        "llava_vid": {
+          "pre_prompt": "",
+          "post_prompt": "The best answer is:"
+        },
+        "xcomposer2_4khd": {
+          "pre_prompt": "[UNUSED_TOKEN_146]user\n",
+          "post_prompt": " Answer this question with A, B, C, or D.[UNUSED_TOKEN_145]\n[UNUSED_TOKEN_146]assistant\n"
+        },
+        "pre_prompt": "",
+        "post_prompt": "\nAnswer with the option's letter from the given choices directly."
+      }
+    }
+  },
+  "versions": {
+    "implicitqa": "Yaml"
+  },
+  "n-shot": {
+    "implicitqa": 0
+  },
+  "higher_is_better": {
+    "implicitqa": {
+      "videomme_perception_score": true
+    }
+  },
+  "n-samples": {
+    "implicitqa": {
+      "original": 961,
+      "effective": 961
+    }
+  },
+  "config": {
+    "model": "llava_onevision",
+    "model_args": "pretrained=lmms-lab/llava-onevision-qwen2-7b-ov,conv_template=qwen_1_5,device_map=auto,model_name=llava_qwen,max_frames_num=8",
+    "batch_size": "1",
+    "batch_sizes": [],
+    "device": null,
+    "use_cache": null,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "gen_kwargs": "",
+    "random_seed": 0,
+    "numpy_seed": 1234,
+    "torch_seed": 1234,
+    "fewshot_seed": 1234
+  },
+  "git_hash": "59fa2d7",
+  "date": "20250728_190620",
+  "task_hashes": {
+    "implicitqa": "8d943daf5372299a0fa0e1348544e133f551786cc828455cff6259cb3669c2d5"
+  },
+  "model_source": "llava_onevision",
+  "model_name": "lmms-lab/llava-onevision-qwen2-7b-ov",
+  "model_name_sanitized": "lmms-lab__llava-onevision-qwen2-7b-ov",
+  "system_instruction": null,
+  "system_instruction_sha": null,
+  "fewshot_as_multiturn": false,
+  "chat_template": null,
+  "chat_template_sha": null,
+  "start_time": 1849978.310887588,
+  "end_time": 1850279.139098467,
+  "total_evaluation_time_seconds": "300.82821087911725"
+}

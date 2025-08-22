@@ -35,6 +35,7 @@ class OpenAICompatible(lmms):
         timeout: int = 10,
         max_retries: int = 5,
         max_size_in_mb: int = 20,
+        max_num_frames: int = 16,
         continual_mode: bool = False,
         response_persistent_folder: str = None,
         azure_openai: bool = False,
@@ -45,6 +46,7 @@ class OpenAICompatible(lmms):
         self.timeout = timeout
         self.max_retries = max_retries
         self.max_size_in_mb = max_size_in_mb  # some models have a limit on the size of the image
+        self.max_num_frames = max_num_frames
         self.continual_mode = continual_mode
         if self.continual_mode:
             if response_persistent_folder is None:
@@ -162,7 +164,7 @@ class OpenAICompatible(lmms):
                 imgs = []  # multiple images or frames for video
                 for visual in visuals:
                     if isinstance(visual, str) and (".mp4" in visual or ".avi" in visual or ".mov" in visual or ".flv" in visual or ".wmv" in visual):
-                        frames = self.encode_video(visual, self.max_frames_num)
+                        frames = self.encode_video(visual, self.max_num_frames)
                         imgs.extend(frames)
                     elif isinstance(visual, str) and (".jpg" in visual or ".jpeg" in visual or ".png" in visual or ".gif" in visual or ".bmp" in visual or ".tiff" in visual or ".webp" in visual):
                         img = self.encode_image(visual)
@@ -201,7 +203,7 @@ class OpenAICompatible(lmms):
                 payload["reasoning_effort"] = "medium"
                 payload["response_format"] = {"type": "text"}
                 payload.pop("max_tokens")
-                payload["max_completion_tokens"] = gen_kwargs["max_tokens"]
+                payload["max_completion_tokens"] = gen_kwargs["max_new_tokens"]
 
             for attempt in range(self.max_retries):
                 try:

@@ -33,39 +33,39 @@ def meanstd(len_scores, dic_scores, n, fns, t1, t2, all_depth):
     no_split_fn = []
     i= 0
     for dic_score, fn in zip(dic_scores, fns):
-            # normalized_data = (score - np.min(score)) / (np.max(score) - np.min(score))
-            score = dic_score['score']
-            depth = dic_score['depth']
-            mean = np.mean(score)
-            std = np.std(score)
+        # normalized_data = (score - np.min(score)) / (np.max(score) - np.min(score))
+        score = dic_score['score']
+        depth = dic_score['depth']
+        mean = np.mean(score)
+        std = np.std(score)
 
-            top_n = heapq.nlargest(n, range(len(score)), score.__getitem__)
-            top_score = [score[t] for t in top_n]
-            # print(f"split {i}: ",len(score))
-            i += 1
-            mean_diff = np.mean(top_score) - mean
-            if mean_diff > t1 and std > t2:
-                    no_split_scores.append(dic_score)
-                    no_split_fn.append(fn)
-            elif depth < all_depth:
-            # elif len(score)>(len_scores/n)*2 and len(score) >= 8:
-                    score1 = score[:len(score)//2]
-                    score2 = score[len(score)//2:]
-                    fn1 = fn[:len(score)//2]
-                    fn2 = fn[len(score)//2:]                       
-                    split_scores.append(dict(score=score1,depth=depth+1))
-                    split_scores.append(dict(score=score2,depth=depth+1))
-                    split_fn.append(fn1)
-                    split_fn.append(fn2)
-            else:
-                    no_split_scores.append(dic_score)
-                    no_split_fn.append(fn)
+        top_n = heapq.nlargest(n, range(len(score)), score.__getitem__)
+        top_score = [score[t] for t in top_n]
+        # print(f"split {i}: ",len(score))
+        i += 1
+        mean_diff = np.mean(top_score) - mean
+        if mean_diff > t1 and std > t2:
+            no_split_scores.append(dic_score)
+            no_split_fn.append(fn)
+        elif depth < all_depth:
+        # elif len(score)>(len_scores/n)*2 and len(score) >= 8:
+            score1 = score[:len(score)//2]
+            score2 = score[len(score)//2:]
+            fn1 = fn[:len(score)//2]
+            fn2 = fn[len(score)//2:]                       
+            split_scores.append(dict(score=score1,depth=depth+1))
+            split_scores.append(dict(score=score2,depth=depth+1))
+            split_fn.append(fn1)
+            split_fn.append(fn2)
+        else:
+            no_split_scores.append(dic_score)
+            no_split_fn.append(fn)
 
     if len(split_scores) > 0:
-            all_split_score, all_split_fn = meanstd(len_scores, split_scores, n, split_fn,t1,t2,all_depth)
+        all_split_score, all_split_fn = meanstd(len_scores, split_scores, n, split_fn,t1,t2,all_depth)
     else:
-            all_split_score = []
-            all_split_fn = []
+        all_split_score = []
+        all_split_fn = []
     all_split_score = no_split_scores + all_split_score
     all_split_fn = no_split_fn + all_split_fn
 
@@ -93,15 +93,22 @@ def main(args):
         os.mkdir(out_score_path)
 
     for qid in tqdm.tqdm(itm_outs.keys()):
-        
-        score = []
-        for si in itm_outs[qid]['score']:
-            qs = si['question_score']
-            cs = np.mean(si['context_score'])
-            sc = args.coef * qs + (1-args.coef) * cs
-            score.append(sc)
+        try:
+            score = itm_outs[qid]['score']
+        except:
+            score = itm_outs[qid]['question_score']
 
         fn = itm_outs[qid]['frame_idx']
+
+        if len(score) != len(fn):
+            if len(fn) % len(score) == 0:
+                iter_ = len(fn) // len(score)
+                score = np.repeat(score,iter_)
+            else:
+                iter_ = len(fn) // len(score) + 1
+                score = np.repeat(score,iter_)
+                score = score[:len(fn)]
+
         num = max_num_frames
         if len(score) >= num:
             normalized_data = (score - np.min(score)) / (np.max(score) - np.min(score))
@@ -112,7 +119,10 @@ def main(args):
                 for s,f in zip(a,b): 
                     f_num = int(num / 2**(s['depth']))
                     topk = heapq.nlargest(f_num, range(len(s['score'])), s['score'].__getitem__)
-                    f_nums = [f[t] for t in topk]
+                    try:
+                        f_nums = [f[t] for t in topk]
+                    except:
+                        import pdb;pdb.set_trace()
                     out.extend(f_nums)
             out.sort()
             if len(out) == 0:
@@ -128,13 +138,6 @@ def main(args):
     score_path = os.path.join(out_score_path,args.file_name)
     with open(score_path,'w') as f:
         json.dump(outs,f)
-
-
-# frame_idx.append({
-#     "vid" : anno['video_id'],
-#     "qid" : qid,
-#     "frame_idx" : indices
-# })
 
 if __name__ == '__main__':
     args = parse_arguments()

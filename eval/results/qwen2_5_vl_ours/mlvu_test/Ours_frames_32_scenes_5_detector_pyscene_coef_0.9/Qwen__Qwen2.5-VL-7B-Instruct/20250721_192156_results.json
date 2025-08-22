@@ -15,7 +15,7 @@
       "dataset_path": "sy1998/MLVU_Test",
       "dataset_kwargs": {
         "token": true,
-        "data_files": "/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/recent_bench/25CVPR_MLVU/mlvu_test/test-ground-truth/test_mcq_gt_buffer.pkl"
+        "data_files": "/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/benchmarks/25CVPR_MLVU/mlvu_test/test-ground-truth/test_mcq_gt_buffer.pkl"
       },
       "test_split": "test",
       "full_docs": false,

@@ -14,13 +14,22 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     frame_idx_list = json.load(open(args.input_file))
-    original_dataset = pickle.load(open(args.original_file,'rb'))
+    ext = args.original_file.split('.')[-1]
+    if ext == 'pk':
+        original_dataset = pickle.load(open(args.original_file,'rb'))
+    elif ext == 'json':
+        original_dataset = json.load(open(args.original_file))
 
     for i in range(len(frame_idx_list)):
         find = False
         for j in range(len(original_dataset)):
+            q_key = 'question_id'
             qid = frame_idx_list[i]['qid']
-            qid_o = original_dataset[j]['question_id']
+            if q_key not in original_dataset[j].keys():
+                q_key = 'id'
+            qid_o = original_dataset[j][q_key]
+            if type(qid_o) == int:
+                qid_o = str(qid_o)
             if qid == qid_o:
                 frame_idx = frame_idx_list[i]['frame_idx']
                 frame_idx = [str(idx) for idx in sorted(frame_idx)]
@@ -32,5 +41,9 @@ if __name__ == '__main__':
         if find == False:
             import pdb;pdb.set_trace()
 
-    with open(args.output_file, 'wb') as f:
-        pickle.dump(original_dataset, f, protocol=pickle.HIGHEST_PROTOCOL)
+    if ext == 'pk':
+        with open(args.output_file, 'wb') as f:
+            pickle.dump(original_dataset, f, protocol=pickle.HIGHEST_PROTOCOL)
+    elif ext == 'json':
+        with open(args.output_file, "w") as json_file:
+            json.dump(original_dataset, json_file)

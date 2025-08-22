@@ -3,43 +3,80 @@ import os
 import argparse
 import json
 import tqdm
+import pyarrow.parquet as pq
+import ast
 
 from openai import OpenAI
 
 def parse_eval_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument(
-        "--dataset",
-        default='../..//data/recent_bench/25CVPR_MLVU/mlvu_test/test-ground-truth/test_mcq_gt.json',
+        "--annotation_file",
+        default='../../data/benchmarks/mlvu/anno/test_mcq_gt.json',
     )
     parser.add_argument(
         "--gpt_version",
         default='gpt-4o-2024-11-20',
     )
-    parser.add_argument(
-        "--output_path",
-        default='./test_7.json',
-    )
     args = parser.parse_args()
     return args
 
-if __name__ == '__main__': # 한번 돌릴때 마다 1.4 달라 정도 소요
+if __name__ == '__main__':
     
     args = parse_eval_args()
-    annotation_list = json.load(open(args.dataset))
+    ext = args.annotation_file.split('.')[-1]
+    dataset = args.annotation_file.split('/')[4]
+    output_path = f'./llms/{args.gpt_version}/{dataset}.json'
 
-    if  os.path.isfile(args.output_path):
-        output = json.load(open(args.output_path))
+    if os.path.isdir(f'./llms/{args.gpt_version}')==False:
+        os.mkdir(f'./llms/{args.gpt_version}')
+
+    if ext == 'json':
+        annotation_list = json.load(open(args.annotation_file))
+        if 'question' not in annotation_list[0].keys():
+            for anno in annotation_list:
+                anno['question'] = anno['Question']
+                del anno['Question']
+
+    elif ext =='jsonl':
+        with open(args.annotation_file) as f: # implicitqa
+            annotation_list = []
+            for line in f:
+                anno = json.loads(line)
+                anno['question'] = anno['question_text']
+                del anno['question_text']
+                annotation_list.append(anno)
+
+    elif ext == 'parquet':
+        annotation_list = pq.read_table(args.annotation_file).to_pandas().to_dict(orient='records')
+        for anno in annotation_list:
+            meta_dict = ast.literal_eval(anno['meta'])
+            if 'id' in meta_dict.keys():
+                anno['question_id'] = meta_dict['id']
+            elif 'question_id' in meta_dict.keys():
+                anno['question_id'] = meta_dict['question_id']
+            elif 'key' in meta_dict.keys():
+                anno['question_id'] = meta_dict['key']
+
+    if os.path.isfile(output_path):
+        output = json.load(open(output_path))
     else:
         output = dict()
 
     client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
     for anno in tqdm.tqdm(annotation_list):
+
         identify_key = 'question_id'
         if identify_key not in anno.keys():
-            if 'id' in anno.keys():
+            if 'id' in anno.keys(): # longvideobench
                 identify_key = 'id'
+            elif 'key' in anno.keys(): # minerva
+                identify_key = 'key'
+            elif 'Question ID' in anno.keys(): #videoholmes
+                identify_key = 'Question ID'
+            elif 'questionID' in anno.keys(): # rtvbench
+                identify_key = 'questionID'
 
         if anno[identify_key] not in output.keys():
             messages = list()
@@ -82,10 +119,13 @@ if __name__ == '__main__': # 한번 돌릴때 마다 1.4 달라 정도 소요
                 "Please follow the above example format when answering.\n\n"
                 f"Question: {anno['question']}"
             )
-
             messages.append({"role": "user", "content": f"{query}"})
+
             try:
-                completion = client.chat.completions.create(model=args.gpt_version, messages=messages, temperature=0, seed=42)
+                if 'o3' not in args.gpt_version:
+                    completion = client.chat.completions.create(model=args.gpt_version, messages=messages, temperature=0, seed=42)
+                else:
+                    completion = client.chat.completions.create(model=args.gpt_version, messages=messages, seed=42)
                 answer_content = completion.choices[0].message.content
                 output[anno[identify_key]] = {
                     "question" : anno['question'],
@@ -96,5 +136,5 @@ if __name__ == '__main__': # 한번 돌릴때 마다 1.4 달라 정도 소요
         else:
             continue
 
-    with open(args.output_path, "w") as json_file:
+    with open(output_path, "w") as json_file:
         json.dump(output, json_file, indent=4)

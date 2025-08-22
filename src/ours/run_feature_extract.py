@@ -43,11 +43,11 @@ def parse_eval_args() -> argparse.Namespace:
 
     parser.add_argument(
         "--input_base_path",
-        default='/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/recent_bench/25CVPR_MLVU/mlvu_test/video',
+        default='/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/benchmarks/25CVPR_MLVU/mlvu_test/video',
     )
     parser.add_argument(
         "--output_base_path",
-        default='/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/recent_bench/25CVPR_MLVU/mlvu_test/DINOv2_frame_features',
+        default='/data3/gtlim/workspace/26CVPR_VideoLLM/LVU/data/benchmarks/25CVPR_MLVU/mlvu_test/DINOv2_frame_features',
     )
     args = parser.parse_args()
     return args

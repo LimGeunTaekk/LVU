@@ -1,0 +1,130 @@
+{
+  "results": {
+    "minerva": {
+      "alias": "minerva",
+      "minerva_perception_score,none": 34.82688391038697,
+      "minerva_perception_score_stderr,none": "N/A"
+    }
+  },
+  "group_subtasks": {
+    "minerva": []
+  },
+  "configs": {
+    "minerva": {
+      "task": "minerva",
+      "dataset_path": "../data/benchmarks/minerva",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "anno/minerva_buffer.json"
+        },
+        "token": false,
+        "cache_dir": "minerva",
+        "video": false
+      },
+      "test_split": "test",
+      "full_docs": false,
+      "process_results_use_image": false,
+      "doc_to_visual": "<function minerva_doc_to_visual at 0x7f9208050430>",
+      "doc_to_text": "<function minerva_doc_to_text at 0x7f9200618e50>",
+      "doc_to_target": "answer",
+      "process_results": "<function minerva_process_results at 0x7f92006344c0>",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "minerva_perception_score",
+          "aggregation": "<function minerva_aggregate_results at 0x7f9200634a60>",
+          "higher_is_better": true
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "max_new_tokens": 16,
+        "temperature": 0.0,
+        "top_p": 1.0,
+        "num_beams": 1,
+        "do_sample": false,
+        "until": [
+          "\n\n"
+        ]
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": [
+        {
+          "version": 0.0
+        }
+      ],
+      "lmms_eval_specific_kwargs": {
+        "default": {
+          "pre_prompt": "",
+          "post_prompt": "\nAnswer with the option's letter from the given choices directly."
+        },
+        "gpt4v": {
+          "pre_prompt": "",
+          "post_prompt": "Answer the question with A, B, C, or D."
+        },
+        "llava_vid": {
+          "pre_prompt": "",
+          "post_prompt": "The best answer is:"
+        },
+        "xcomposer2_4khd": {
+          "pre_prompt": "[UNUSED_TOKEN_146]user\n",
+          "post_prompt": " Answer this question with A, B, C, or D.[UNUSED_TOKEN_145]\n[UNUSED_TOKEN_146]assistant\n"
+        },
+        "pre_prompt": "",
+        "post_prompt": "\nAnswer with the option's letter from the given choices directly."
+      }
+    }
+  },
+  "versions": {
+    "minerva": "Yaml"
+  },
+  "n-shot": {
+    "minerva": 0
+  },
+  "higher_is_better": {
+    "minerva": {
+      "minerva_perception_score": true
+    }
+  },
+  "n-samples": {
+    "minerva": {
+      "original": 1473,
+      "effective": 1473
+    }
+  },
+  "config": {
+    "model": "qwen2_5_vl",
+    "model_args": "pretrained=Qwen/Qwen2.5-VL-7B-Instruct,attn_implementation=flash_attention_2,max_pixels=12845056,interleave_visuals=False,max_num_frames=32",
+    "batch_size": "1",
+    "batch_sizes": [],
+    "device": null,
+    "use_cache": null,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "gen_kwargs": "",
+    "random_seed": 0,
+    "numpy_seed": 1234,
+    "torch_seed": 1234,
+    "fewshot_seed": 1234
+  },
+  "git_hash": "59fa2d7",
+  "date": "20250801_073954",
+  "task_hashes": {
+    "minerva": "3373fcc56ebb219534bec8e32a79f5a08248cd360a1bff4e8a0e9ffda8d6c5c6"
+  },
+  "model_source": "qwen2_5_vl",
+  "model_name": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "model_name_sanitized": "Qwen__Qwen2.5-VL-7B-Instruct",
+  "system_instruction": null,
+  "system_instruction_sha": null,
+  "fewshot_as_multiturn": false,
+  "chat_template": null,
+  "chat_template_sha": null,
+  "start_time": 2154391.828377997,
+  "end_time": 2161418.854565803,
+  "total_evaluation_time_seconds": "7027.026187805925"
+}

@@ -1058,18 +1058,23 @@ class ConfigurableTask(Task):
         #         download_config=download_config,
         #         **dataset_kwargs if dataset_kwargs is not None else {},
         #     )
+        if type(dataset_kwargs['data_files']) != dict: # mlvu
+            dataset = pickle.load(open(dataset_kwargs['data_files'],'rb'))
+            dataset = Dataset.from_list(dataset)
 
-        dataset = pickle.load(open(dataset_kwargs['data_files'],'rb'))
-        dataset = Dataset.from_list(dataset)
+            if self.has_test_docs():
+                split = self.config.test_split
+            elif self.has_validation_docs():
+                split = self.config.validation_split
+            else:
+                assert False, f"Task dataset (path={self.DATASET_PATH}, name={self.DATASET_NAME}) must have valid or test docs!"
 
-        if self.has_test_docs():
-            split = self.config.test_split
-        elif self.has_validation_docs():
-            split = self.config.validation_split
+            self.dataset = datasets.DatasetDict({split : dataset})
         else:
-            assert False, f"Task dataset (path={self.DATASET_PATH}, name={self.DATASET_NAME}) must have valid or test docs!"
-
-        self.dataset = datasets.DatasetDict({split : dataset})
+            self.dataset = datasets.load_dataset(
+            path=self.DATASET_PATH,
+            data_files=dataset_kwargs['data_files']
+        )
 
         if self.config.process_docs is not None:
             for split in self.dataset:
